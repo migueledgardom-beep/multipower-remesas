@@ -58,26 +58,26 @@ const { setCalcResult } = useStore()
 
         {/* COUNTRIES */}
         <div className="mb-10">
-          <h2 className="text-gray-400 uppercase tracking-[4px] text-sm mb-5">
+          <h2 className="text-gray-400 uppercase tracking-wide [4px] text-sm mb-5">
             Selecciona el país de origen
           </h2>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-2 gap-3">
             {COUNTRIES.map((country) => (
               <button
                 key={country.name}
                 onClick={() => setSelected(country)}
                 className={
                   selected?.name === country.name
-                    ? 'border border-yellow-500 bg-[#15120a] rounded-2xl p-5 text-left transition-all duration-200'
-                    : 'border border-[#222] bg-[#111] rounded-2xl p-5 text-left transition-all duration-200'
+                    ? 'border border-yellow-500 bg-[#15120a] rounded-xl p-3 text-left transition-all duration-200'
+                    : 'border border-[#222] bg-[#111] rounded-xl p-3 text-left transition-all duration-200'
                 }
               >
-                <div className="text-5xl font-black text-white mb-2">
+                <div className="text-3xl font-black text-white mb-2">
                   {country.currency}
                 </div>
 
-                <div className="text-3xl font-bold text-white">
+                <div className="text-xl font-bold text-white">
                   {country.name}
                 </div>
 
@@ -98,7 +98,7 @@ const { setCalcResult } = useStore()
           <div className="bg-[#111] border border-[#222] rounded-3xl p-5">
             <div className="flex items-center overflow-hidden rounded-2xl border border-yellow-500/20">
               
-              <div className="bg-yellow-500/10 px-6 py-5 text-5xl font-black text-yellow-400">
+              <div className="bg-yellow-500/10 px-6 py-7 text-3xl font-black text-yellow-400">
                 {selected?.currency || '---'}
               </div>
 
@@ -106,7 +106,7 @@ const { setCalcResult } = useStore()
                 type="number"
                 value={amount}
                 onChange={(e) => setAmount(Number(e.target.value))}
-                className="w-full bg-transparent px-6 py-5 text-6xl text-white outline-none"
+                className="w-full bg-transparent px-6 py-7 text-6xl text-white outline-none"
                 placeholder="0"
               />
             </div>
@@ -117,11 +117,11 @@ const { setCalcResult } = useStore()
         <div className="bg-[#111] border border-[#222] rounded-3xl p-8 mb-8">
           
           <div className="flex justify-between items-center border-b border-[#222] pb-5 mb-5">
-            <span className="text-gray-400 text-2xl">
+            <span className="text-gray-400 text-4xl">
               Tasa Multipower
             </span>
 
-            <span className="text-white text-2xl font-bold">
+            <span className="text-white text-4xl font-bold">
               1 {selected.currency} = Bs. {rate.toFixed(3)}
             </span>
           </div>
@@ -139,11 +139,11 @@ const { setCalcResult } = useStore()
           </div>
 
           <div className="flex justify-between items-center">
-            <span className="text-gray-400 text-2xl">
+            <span className="text-gray-400 text-4xl">
               Equivalente USD (BCV)
             </span>
 
-            <span className="text-orange-400 text-5xl font-black">
+            <span className="text-orange-400 text-3xl font-black">
               ${usdEquivalent.toFixed(2)}
             </span>
           </div>

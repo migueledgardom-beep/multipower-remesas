@@ -51,7 +51,7 @@ const { setCalcResult } = useStore()
         {/* HEADER */}
         <div className="flex items-center justify-between mb-10">
           <div>
-            <h1 className="text-4xl font-black text-yellow-400">
+            <h1 className="text-lg md:text-4xl font-black text-yellow-400">
               Multipower
             </h1>
 
@@ -91,7 +91,7 @@ const { setCalcResult } = useStore()
     <div className="
       text-yellow-400
       font-black
-      text-4xl
+      text-xl md:text-4xl
       tracking-tight
     ">
       Bs. {bcvRate?.toFixed(2)}
@@ -195,63 +195,36 @@ const { setCalcResult } = useStore()
 </div>
 {/* AMOUNT */}
 <div className="mb-8">
+
   <label className="block text-gray-400 text-sm mb-3 tracking-wider">
     💰 MONTO A ENVIAR
-    <div className="mb-8">
-  <label className="block text-gray-400 text-sm mb-3 tracking-wider">
-    🏦 MÉTODO DE PAGO EN VENEZUELA
   </label>
 
-  <select
-    value={paymentMethod}
-    onChange={(e) =>
-      setPaymentMethod(e.target.value)
-    }
+  <div
     className="
-      w-full
+      flex
+      items-center
       bg-[#111]
       border
       border-[#222]
       rounded-2xl
-      p-5
-      text-xl
-      text-white
-      outline-none
-      focus:border-yellow-500
+      overflow-hidden
+      shadow-lg
     "
   >
-    <option value="transferencia">
-      Transferencia bancaria
-    </option>
 
-    <option value="pagomovil">
-      Pago móvil
-    </option>
-  </select>
-</div>
-  </label>
-
-  <div className="
-    flex
-    items-center
-    bg-[#111]
-    border
-    border-[#222]
-    rounded-3xl
-    overflow-hidden
-    shadow-lg
-  ">
-    
-    <div className="
-      px-6
-      py-5
-      bg-[#181818]
-      border-r
-      border-[#222]
-      text-yellow-400
-      text-3xl
-      font-black
-    ">
+    <div
+      className="
+        px-5
+        py-4
+        bg-[#181818]
+        border-r
+        border-[#222]
+        text-yellow-400
+        text-2xl
+        font-black
+      "
+    >
       {selected.currency}
     </div>
 
@@ -259,13 +232,15 @@ const { setCalcResult } = useStore()
       type="number"
       value={amount}
       onChange={(e) =>
-  setAmount(e.target.value)
-}
+        setAmount(e.target.value)
+      }
       className="
         w-full
         bg-transparent
-        px-6
-        text-5xl
+        px-5
+        py-4
+        text-3xl
+        md:text-5xl
         font-light
         outline-none
         text-white
@@ -273,8 +248,10 @@ const { setCalcResult } = useStore()
     />
   </div>
 </div>
-        {/* RESULT */}
-        <div className="mb-8">
+
+{/* PAYMENT METHOD */}
+<div className="mb-8">
+
   <label className="block text-gray-400 text-sm mb-3 tracking-wider">
     🏦 MÉTODO DE PAGO EN VENEZUELA
   </label>
@@ -290,8 +267,8 @@ const { setCalcResult } = useStore()
       border
       border-[#222]
       rounded-2xl
-      p-5
-      text-xl
+      p-4
+      text-lg
       text-white
       outline-none
       focus:border-yellow-500
@@ -306,41 +283,55 @@ const { setCalcResult } = useStore()
     </option>
   </select>
 </div>
-        <div className="bg-[#111] border border-[#222] rounded-3xl p-8 mb-8">
-          
-          <div className="flex justify-between items-center border-b border-[#222] pb-5 mb-5">
-            <span className="text-gray-400 text-4xl">
-              Tasa Multipower
-            </span>
+{/* RESULT */}
+<div
+  className="
+    bg-[#111]
+    border
+    border-yellow-500/10
+    rounded-2xl
+    p-5
+    md:p-8
+    mb-8
+    shadow-[0_0_30px_rgba(255,180,0,0.06)]
+  "
+>
 
-            <span className="text-white text-4xl font-bold">
-              1 {selected.currency} = Bs. {rate.toFixed(3)}
-            </span>
-          </div>
+  <div className="flex justify-between items-center gap-4 border-b border-[#222] pb-4 mb-4">
+    <span className="text-gray-400 text-lg md:text-4xl">
+      Tasa Multipower
+    </span>
 
-          <div className="flex justify-between items-center border-b border-[#222] pb-5 mb-5">
-            <span className="text-gray-400 text-3xl">
-              Total en Bolívares
-            </span>
+    <span className="text-white text-lg md:text-4xl font-bold">
+      1 {selected.currency} = Bs. {rate.toFixed(4)}
+    </span>
+  </div>
 
-            <span className="text-yellow-400 text-6xl font-black">
-              Bs. {totalBs.toLocaleString('es-VE', {
-                minimumFractionDigits: 2,
-              })}
-            </span>
-          </div>
+  <div className="flex justify-between items-center gap-4 border-b border-[#222] pb-4 mb-4">
+    <span className="text-gray-400 text-lg md:text-3xl">
+      Total en Bolívares
+    </span>
 
-          <div className="flex justify-between items-center">
-            <span className="text-gray-400 text-4xl">
-              Equivalente USD (BCV)
-            </span>
+    <span className="text-yellow-400 text-2xl md:text-5xl font-black">
+      Bs. {totalBs.toLocaleString('es-VE', {
+        minimumFractionDigits: 2,
+      })}
+    </span>
+  </div>
 
-            <span className="text-orange-400 text-3xl font-black">
-              ${usdEquivalent.toFixed(2)}
-            </span>
-          </div>
-        </div>
+  <div className="flex flex-col md:flex-row
+md:justify-between
+md:items-center
+gap-2">
+    <span className="text-gray-400 text-lg md:text-3xl">
+      Equivalente USD (BCV)
+    </span>
 
+    <span className="text-orange-400 text-lg md:text-3xl font-black">
+      ${usdEquivalent.toFixed(2)}
+    </span>
+  </div>
+</div>
         {/* BUTTON */}
         <button
   onClick={() => {

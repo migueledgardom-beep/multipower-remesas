@@ -96,7 +96,7 @@ export default function CalculatorPage() {
           <div>
             <p className="label-sm mb-2">¿Cuánto envías?</p>
             <div className="card-dark rounded-2xl p-4 flex items-center gap-3">
-              <div className="bg-[rgba(245,200,66,0.1)] border border-[rgba(245,200,66,0.2)] rounded-lg px-3 py-2 font-syne font-bold text-sm text-gold min-w-[56px] text-center">
+              <div className="bg-[rgba(245,200,66,0.1)] border border-[rgba(245,200,66,0.2)] rounded-lg px-3 py-2 font-syne font-bold text-base text-gold min-w-[56px] text-center">
                 {selected.currency}
               </div>
               <input
@@ -105,7 +105,7 @@ export default function CalculatorPage() {
                 placeholder="0"
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
-                className="flex-1 bg-transparent border-none text-2xl font-light text-white placeholder-[#2a2a2a]"
+                className="flex-1 bg-transparent border-none text-4xl font-light text-white placeholder-[#2a2a2a]"
                 autoFocus
               />
             </div>
@@ -143,10 +143,29 @@ export default function CalculatorPage() {
 
         {/* CTA */}
         {result && (
-          <button className="btn-green" onClick={handleContinue}>
-            <span>📋</span>
-            Completar solicitud
-          </button>
+         <button
+  className="
+    w-full
+    bg-gradient-to-r
+    from-orange-500
+    to-yellow-400
+    hover:from-orange-400
+    hover:to-yellow-300
+    text-black
+    font-bold
+    py-4
+    rounded-2xl
+    shadow-lg
+    shadow-orange-500/20
+    transition-all
+    duration-300
+    hover:scale-[1.02]
+    active:scale-[0.98]
+  "
+>
+  <span>📋</span>
+  Completar solicitud
+</button>
         )}
       </div>
     </div>

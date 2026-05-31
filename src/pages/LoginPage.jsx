@@ -99,12 +99,20 @@ export default function LoginPage() {
       <div className="w-full max-w-md bg-[#111] border border-[#222] rounded-3xl p-8 shadow-2xl">
 
         <div className="text-center mb-8">
-          <h1 className="text-5xl font-black text-yellow-400 mb-2">
-            Multipower
-          </h1>
+          <div className="flex items-center justify-center gap-3 mb-2">
+
+  <span className="text-3xl">
+    🔥
+  </span>
+
+  <h1 className="text-4xl md:text-5xl font-black text-yellow-400">
+    Inversiones Multipower
+  </h1>
+
+</div>
 
           <p className="text-gray-400">
-            Remesas Internacionales
+            Recargas • Remesas • Inversiones
           </p>
         </div>
 

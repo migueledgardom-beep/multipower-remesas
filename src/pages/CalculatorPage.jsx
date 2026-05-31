@@ -1,172 +1,171 @@
-// src/pages/CalculatorPage.jsx
-import { useState, useEffect } from 'react'
+import { useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import Header from '../components/Header'
-import { useRates } from '../hooks/useRates'
-import { COUNTRIES } from '../utils/countries'
+
 import useStore from '../store/useStore'
-import { logout } from '../services/authService'
+import { COUNTRIES } from '../utils/countries'
+import { useRates } from '../hooks/useRates'
 
 export default function CalculatorPage() {
   const navigate = useNavigate()
-  const { rates, bcvRate, ratesLoading } = useRates()
-  const { setCalcResult } = useStore()
+const { setCalcResult } = useStore()
+  const { rates, bcvRate } = useRates()
 
-  const [selected, setSelected] = useState(null)
-  const [amount, setAmount] = useState('')
-  const [result, setResult] = useState(null)
+  const [selected, setSelected] = useState(COUNTRIES[0])
+  const [amount, setAmount] = useState(10000)
 
-  // Recalculate when amount or country changes
-  useEffect(() => {
-    if (!selected || !amount || !rates) {
-      setResult(null)
-      return
-    }
-    const num = parseFloat(amount)
-    if (isNaN(num) || num <= 0) {
-      setResult(null)
-      return
-    }
-    const rate = rates[selected.rateKey] ?? 0
-    const totalBs = num * rate
-    const totalUsd = totalBs / bcvRate
-    setResult({ totalBs, totalUsd, rate, amount: num })
-  }, [amount, selected, rates, bcvRate])
+  const rate = useMemo(() => {
+    if (!selected || !rates) return 0
 
-  function handleContinue() {
-    if (!result || !selected) return
-    setCalcResult({
-      country: selected.name,
-      flag: selected.flag,
-      currency: selected.currency,
-      rate: result.rate,
-      amount: result.amount,
-      totalBs: result.totalBs,
-      totalUsd: result.totalUsd,
-    })
-    navigate('/formulario')
-  }
+    return Number(rates[selected.rateKey] || 0)
+  }, [selected, rates])
+
+  const totalBs = useMemo(() => {
+    return amount * rate
+  }, [amount, rate])
+
+  const usdEquivalent = useMemo(() => {
+    if (!bcvRate) return 0
+
+    return totalBs / bcvRate
+  }, [totalBs, bcvRate])
 
   return (
-    <div className="min-h-screen bg-black flex flex-col max-w-lg mx-auto">
-      <Header />
+    <div className="min-h-screen bg-black text-white px-6 py-8">
+      <div className="max-w-2xl mx-auto">
+        
+        {/* HEADER */}
+        <div className="flex items-center justify-between mb-10">
+          <div>
+            <h1 className="text-4xl font-black text-yellow-400">
+              Multipower
+            </h1>
 
-      {/* Logout */}
-      <div className="flex justify-end px-5 pt-2">
-        <button
-          className="text-[11px] text-[#555] hover:text-[#888] transition-colors"
-          onClick={() => logout()}
-        >
-          Cerrar sesión
-        </button>
-      </div>
+            <p className="text-gray-400 text-lg">
+              Remesas Internacionales
+            </p>
+          </div>
 
-      <div className="flex-1 px-5 py-4 flex flex-col gap-5">
-        {/* Country selector */}
-        <div>
-          <p className="label-sm mb-3">Selecciona el país de origen</p>
-          <div className="grid grid-cols-2 gap-2 max-h-56 overflow-y-auto pr-1">
+          <div className="bg-[#111] border border-yellow-500/20 rounded-2xl px-5 py-3">
+            <div className="text-yellow-400 font-bold text-2xl">
+              Bs. {bcvRate?.toFixed(2)}
+            </div>
+
+            <div className="text-gray-400 text-sm">
+              Tasa BCV
+            </div>
+          </div>
+        </div>
+
+        {/* COUNTRIES */}
+        <div className="mb-10">
+          <h2 className="text-gray-400 uppercase tracking-[4px] text-sm mb-5">
+            Selecciona el país de origen
+          </h2>
+
+          <div className="grid grid-cols-2 gap-4">
             {COUNTRIES.map((country) => (
               <button
                 key={country.name}
-                onClick={() => {
-                  setSelected(country)
-                  setAmount('')
-                }}
-                className={`
-                  card-dark p-3 flex items-center gap-2.5 text-left transition-all duration-150
-                  ${selected?.name === country.name
-                    ? 'border-gold bg-[rgba(245,200,66,0.06)]'
-                    : 'hover:border-[#444]'
-                  }
-                `}
+                onClick={() => setSelected(country)}
+                className={
+                  selected?.name === country.name
+                    ? 'border border-yellow-500 bg-[#15120a] rounded-2xl p-5 text-left transition-all duration-200'
+                    : 'border border-[#222] bg-[#111] rounded-2xl p-5 text-left transition-all duration-200'
+                }
               >
-                <span className="text-2xl">{country.flag}</span>
-                <div>
-                  <div className="text-[13px] font-medium text-white">{country.name}</div>
-                  <div className="text-[11px] text-[#666]">{country.currency}</div>
+                <div className="text-5xl font-black text-white mb-2">
+                  {country.currency}
+                </div>
+
+                <div className="text-3xl font-bold text-white">
+                  {country.name}
+                </div>
+
+                <div className="text-lg text-gray-400">
+                  {country.currency}
                 </div>
               </button>
             ))}
           </div>
         </div>
 
-        {/* Amount input */}
-        {selected && (
-          <div>
-            <p className="label-sm mb-2">¿Cuánto envías?</p>
-            <div className="card-dark rounded-2xl p-4 flex items-center gap-3">
-              <div className="bg-[rgba(245,200,66,0.1)] border border-[rgba(245,200,66,0.2)] rounded-lg px-3 py-2 font-syne font-bold text-base text-gold min-w-[56px] text-center">
-                {selected.currency}
+        {/* AMOUNT */}
+        <div className="mb-10">
+          <h2 className="text-gray-400 uppercase tracking-[4px] text-sm mb-5">
+            ¿Cuánto envías?
+          </h2>
+
+          <div className="bg-[#111] border border-[#222] rounded-3xl p-5">
+            <div className="flex items-center overflow-hidden rounded-2xl border border-yellow-500/20">
+              
+              <div className="bg-yellow-500/10 px-6 py-5 text-5xl font-black text-yellow-400">
+                {selected?.currency || '---'}
               </div>
+
               <input
                 type="number"
-                min="0"
-                placeholder="0"
                 value={amount}
-                onChange={(e) => setAmount(e.target.value)}
-                className="flex-1 bg-transparent border-none text-4xl font-light text-white placeholder-[#2a2a2a]"
-                autoFocus
+                onChange={(e) => setAmount(Number(e.target.value))}
+                className="w-full bg-transparent px-6 py-5 text-6xl text-white outline-none"
+                placeholder="0"
               />
             </div>
           </div>
-        )}
+        </div>
 
-        {/* Result */}
-        {result && (
-          <div className="card-dark rounded-2xl p-5 space-y-3">
-            <div className="flex justify-between items-center border-b border-[#2a2a2a] pb-3">
-              <span className="text-sm text-[#888]">Tasa Multipower</span>
-              <span className="font-syne font-semibold text-sm text-white">
-                1 {selected.currency} = Bs. {result.rate}
-              </span>
-            </div>
-            <div className="flex justify-between items-center border-b border-[#2a2a2a] pb-3">
-              <span className="text-sm text-[#888]">Total en Bolívares</span>
-              <span className="font-syne font-bold text-2xl text-gold">
-                Bs. {result.totalBs.toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-              </span>
-            </div>
-            <div className="flex justify-between items-center">
-              <span className="text-sm text-[#888]">Equivalente USD (BCV)</span>
-              <span className="font-syne font-bold text-lg text-fire">
-                $ {result.totalUsd.toFixed(2)}
-              </span>
-            </div>
+        {/* RESULT */}
+        <div className="bg-[#111] border border-[#222] rounded-3xl p-8 mb-8">
+          
+          <div className="flex justify-between items-center border-b border-[#222] pb-5 mb-5">
+            <span className="text-gray-400 text-2xl">
+              Tasa Multipower
+            </span>
+
+            <span className="text-white text-2xl font-bold">
+              1 {selected.currency} = Bs. {rate.toFixed(3)}
+            </span>
           </div>
-        )}
 
-        {/* Loading indicator */}
-        {ratesLoading && (
-          <p className="text-xs text-center text-[#555]">Actualizando tasas...</p>
-        )}
+          <div className="flex justify-between items-center border-b border-[#222] pb-5 mb-5">
+            <span className="text-gray-400 text-3xl">
+              Total en Bolívares
+            </span>
 
-        {/* CTA */}
-        {result && (
-         <button
-  className="
-    w-full
-    bg-gradient-to-r
-    from-orange-500
-    to-yellow-400
-    hover:from-orange-400
-    hover:to-yellow-300
-    text-black
-    font-bold
-    py-4
-    rounded-2xl
-    shadow-lg
-    shadow-orange-500/20
-    transition-all
-    duration-300
-    hover:scale-[1.02]
-    active:scale-[0.98]
-  "
->
-  <span>📋</span>
-  Completar solicitud
-</button>
-        )}
+            <span className="text-yellow-400 text-6xl font-black">
+              Bs. {totalBs.toLocaleString('es-VE', {
+                minimumFractionDigits: 2,
+              })}
+            </span>
+          </div>
+
+          <div className="flex justify-between items-center">
+            <span className="text-gray-400 text-2xl">
+              Equivalente USD (BCV)
+            </span>
+
+            <span className="text-orange-400 text-5xl font-black">
+              ${usdEquivalent.toFixed(2)}
+            </span>
+          </div>
+        </div>
+
+        {/* BUTTON */}
+        <button
+          onClick={() => {
+  setCalcResult({
+    flag: selected.flag,
+    country: selected.name,
+    currency: selected.currency,
+    amount,
+    rate,
+    totalBs,
+  })
+
+  navigate('/formulario')
+}}
+        >
+          📋 Completar solicitud
+        </button>
       </div>
     </div>
   )

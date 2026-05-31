@@ -1,4 +1,5 @@
 // src/App.jsx
+import { useRates } from './hooks/useRates'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { useAuth } from './hooks/useAuth'
 import ProtectedRoute from './components/ProtectedRoute'
@@ -8,11 +9,13 @@ import FormPage from './pages/FormPage'
 import SuccessPage from './pages/SuccessPage'
 
 export default function App() {
+  useRates()
   useAuth() // Listen for Firebase auth state
 
   return (
     <BrowserRouter>
       <Routes>
+        <Route path="/form" element={<FormPage />} />
         <Route path="/login" element={<LoginPage />} />
 
         <Route
@@ -24,23 +27,16 @@ export default function App() {
           }
         />
         <Route
-          path="/formulario"
-          element={
-            <ProtectedRoute>
-              <FormPage />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/exito"
-          element={
-            <ProtectedRoute>
-              <SuccessPage />
-            </ProtectedRoute>
-          }
-        />
+  path="/formulario"
+  element={<FormPage />}
+/>
 
-        <Route path="*" element={<Navigate to="/" replace />} />
+<Route
+  path="/exito"
+  element={<SuccessPage />}
+/>
+
+<Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>
   )

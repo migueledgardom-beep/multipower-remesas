@@ -12,19 +12,16 @@ export function buildWhatsAppMessage({ country, amount, currency, rate, totalBs,
     maximumFractionDigits: 2,
   })
 
-  return (
-    `🔥 *SOLICITUD MULTIPOWER*\n\n` +
-    `📍 País origen: ${country}\n` +
-    `💵 Monto enviado: ${amount.toLocaleString()} ${currency}\n` +
-    `📈 Tasa: 1 ${currency} = Bs. ${rate}\n\n` +
-    `🏦 Banco: ${formData.bank}\n` +
-    `🔢 Cuenta: ${formData.account}\n` +
-    `👤 Beneficiario: ${formData.name}\n` +
-    `🪪 Cédula: ${formData.cedula}\n` +
-    `📱 Teléfono: ${formData.phone}\n` +
-    `💰 Monto Bs: ${bsFormatted}\n\n` +
-    `📎 _Adjunto capture de transferencia_`
-  )
+  return `
+${formData.bank}
+${formData.account}
+${formData.name}
+${formData.cedula}
+${formData.phone}
+Bs. ${Number(totalBs).toLocaleString('es-VE', {
+  minimumFractionDigits: 2,
+})}
+`
 }
 
 /**

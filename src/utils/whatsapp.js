@@ -1,36 +1,90 @@
 // src/utils/whatsapp.js
-// Genera y abre el link de WhatsApp con el mensaje formateado
 
 import useStore from '../store/useStore'
 
 /**
- * Construye el mensaje de WhatsApp con los datos del envío
+ * Construye el mensaje WhatsApp
  */
-export function buildWhatsAppMessage({ country, amount, currency, rate, totalBs, formData }) {
-  const bsFormatted = totalBs.toLocaleString('es-VE', {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  })
-
+export function buildWhatsAppMessage({
+  country,
+  amount,
+  currency,
+  rate,
+  totalBs,
+  formData,
+}) {
   return `
+━━━━━━━━━━━━━━━
+🔥 INVERSIONES MULTIPOWER
+━━━━━━━━━━━━━━━
+
+🌎 Destino:
+${country}
+
+💰 Monto enviado:
+${amount} ${currency}
+
+📈 Tasa:
+${rate}
+
+🏦 Banco:
 ${formData.bank}
-${formData.account}
+
+👤 Beneficiario:
 ${formData.name}
+
+🪪 Documento:
 ${formData.cedula}
+
+📱 Teléfono:
 ${formData.phone}
-Bs. ${Number(totalBs).toLocaleString('es-VE', {
-  minimumFractionDigits: 2,
-})}
+
+💳 Cuenta:
+${formData.account}
+
+💵 Total recibido:
+${Number(totalBs).toLocaleString(
+    'es-VE',
+    {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    }
+  )}
+
+━━━━━━━━━━━━━━━
 `
 }
 
 /**
- * Abre WhatsApp con el mensaje generado
+ * Obtiene número WhatsApp según ref
  */
-export function openWhatsApp(message) {
-  const rates = useStore.getState().rates
-  const waNumber = rates?.WHATSAPP_NUMBER || '58412000000'
+function getWhatsAppByRef(rates, ref) {
+  const refKey =
+    `REF_${ref.toUpperCase()}`
 
-  const url = `https://wa.me/${waNumber}?text=${encodeURIComponent(message)}`
+  return (
+    rates?.[refKey] ||
+    rates?.REF_MULTIPOWER ||
+    '56940668875'
+  )
+}
+
+/**
+ * Abre WhatsApp
+ */
+export function openWhatsApp(
+  message,
+  ref = 'multipower'
+) {
+  const rates = useStore.getState().rates
+
+  const waNumber =
+    getWhatsAppByRef(rates, ref)
+
+  const url =
+    `https://wa.me/${waNumber}?text=${encodeURIComponent(
+      message
+    )}`
+
   window.open(url, '_blank')
 }

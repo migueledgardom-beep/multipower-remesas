@@ -52,7 +52,14 @@ useEffect(() => {
       formData: form,
     })
 
-    openWhatsApp(message)
+    const params = new URLSearchParams(
+  window.location.search
+)
+
+const ref =
+  params.get('ref') || 'multipower'
+
+openWhatsApp(message, ref)
 
     navigate('/exito')
   }

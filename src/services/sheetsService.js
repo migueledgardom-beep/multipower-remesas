@@ -22,16 +22,70 @@ const FALLBACK_RATES = {
  * Parsea el CSV de Google Sheets con formato KEY | VALUE
  */
 function parseCsv(csv) {
-  const lines = csv.trim().split('\n').slice(1) // omitir header
+
+  const lines =
+    csv.trim().split('\n')
+
   const result = {}
+
   for (const line of lines) {
+
+    // ignorar líneas vacías
+    if (!line.trim()) continue
+
     const parts = line.split(',')
-const key = parts[0]?.replace(/"/g, '').trim()
-const value = parts.slice(1).join(',').replace(/"/g, '').trim()
-    if (key && value) {
-      result[key] = parseFloat(value.replace(',', '.'))
+
+    const rawKey =
+      parts[0] || ''
+
+    const rawValue =
+      parts.slice(1).join(',')
+
+    const key =
+      rawKey
+        .replace(/"/g, '')
+        .trim()
+
+    const value =
+      rawValue
+        .replace(/"/g, '')
+        .trim()
+
+    // ignorar headers
+    if (
+      key === 'KEY' ||
+      key === 'A'
+    ) {
+      continue
     }
+
+    // BOOLEANOS
+    if (
+      value.toUpperCase() === 'TRUE'
+    ) {
+      result[key] = true
+      continue
+    }
+
+    if (
+      value.toUpperCase() === 'FALSE'
+    ) {
+      result[key] = false
+      continue
+    }
+
+    // NÚMEROS
+    const parsed =
+      parseFloat(
+        value.replace(',', '.')
+      )
+
+    result[key] =
+      isNaN(parsed)
+        ? value
+        : parsed
   }
+
   return result
 }
 

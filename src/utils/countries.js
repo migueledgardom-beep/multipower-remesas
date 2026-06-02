@@ -2,17 +2,37 @@
 // Mapeo de países con moneda y clave de tasa en Google Sheets
 
 export const COUNTRIES = [
-  { name: 'Chile', flag: '🇨🇱', currency: 'CLP', rateKey: 'CLP_RATE' },
-  { name: 'Perú', flag: '🇵🇪', currency: 'PEN', rateKey: 'PEN_RATE' },
-  { name: 'Colombia', flag: '🇨🇴', currency: 'COP', rateKey: 'COP_RATE' },
-  { name: 'Ecuador', flag: '🇪🇨', currency: 'USD', rateKey: 'USD_RATE' },
-  { name: 'Puerto Rico', flag: '🇵🇷', currency: 'USD', rateKey: 'USD_RATE' },
-  { name: 'EE.UU.', flag: '🇺🇸', currency: 'USD', rateKey: 'USD_RATE' },
-  { name: 'Brasil', flag: '🇧🇷', currency: 'BRL', rateKey: 'BRL_RATE' },
-  { name: 'Argentina', flag: '🇦🇷', currency: 'ARS', rateKey: 'ARS_RATE' },
-  { name: 'México', flag: '🇲🇽', currency: 'MXN', rateKey: 'MXN_RATE' },
-  { name: 'Panamá', flag: '🇵🇦', currency: 'USD', rateKey: 'USD_RATE' },
-  { name: 'Europa', flag: '🇪🇺', currency: 'EUR', rateKey: 'EUR_RATE' },
+  { name: 'Chile', flag: '🇨🇱', currency: 'CLP' },
+
+  { name: 'Venezuela', flag: '🇻🇪', currency: 'BS' },
+
+  { name: 'México', flag: '🇲🇽', currency: 'MXN' },
+
+  { name: 'Argentina', flag: '🇦🇷', currency: 'ARS' },
+
+  {
+    name: 'República Dominicana',
+    flag: '🇩🇴',
+    currency: 'DOP',
+  },
+
+  { name: 'Colombia', flag: '🇨🇴', currency: 'COP' },
+
+  { name: 'Perú', flag: '🇵🇪', currency: 'PEN' },
+
+  {
+    name: 'Estados Unidos',
+    flag: '🇺🇸',
+    currency: 'USD',
+  },
+
+  { name: 'Panamá', flag: '🇵🇦', currency: 'USD' },
+
+  { name: 'España', flag: '🇪🇸', currency: 'EUR' },
+
+  { name: 'Ecuador', flag: '🇪🇨', currency: 'USD' },
+
+  { name: 'Brasil', flag: '🇧🇷', currency: 'BRL' },
 ]
 
 export const BANKS = [

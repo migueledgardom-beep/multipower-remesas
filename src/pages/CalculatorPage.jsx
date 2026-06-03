@@ -50,11 +50,50 @@ export default function CalculatorPage() {
 
   // ── Tasa de cambio dinámica ─────────────────────────────────────────────
   const rate = useMemo(() => {
-    if (!originCountry || !destinationCountry || !rates) return 0
-    if (originCountry.currency === destinationCountry.currency) return 0
-    const rateKey = `${originCountry.currency}_${destinationCountry.currency}_RATE`
-    return Number(rates?.[rateKey] || 0)
-  }, [originCountry, destinationCountry, rates])
+if (
+!originCountry ||
+!destinationCountry ||
+!rates
+) {
+return 0
+}
+
+// MISMO PAÍS
+if (
+originCountry.currency ===
+destinationCountry.currency
+) {
+return 0
+}
+
+const rateKey =
+`${originCountry.currency}_${destinationCountry.currency}_RATE`
+
+const baseRate = Number(
+rates?.[rateKey] || 0
+)
+
+if (!baseRate) {
+return 0
+}
+
+// DESCUENTO PAGO MÓVIL
+if (
+paymentMethod === 'pagomovil' &&
+destinationCountry.currency === 'BS'
+) {
+return baseRate - 0.0003
+}
+
+return baseRate
+
+}, [
+originCountry,
+destinationCountry,
+rates,
+paymentMethod,
+])
+
 
   // ── Totales ─────────────────────────────────────────────────────────────
   const totalBs = useMemo(() => Number(amount || 0) * rate, [amount, rate])
@@ -329,16 +368,20 @@ export default function CalculatorPage() {
         <button
           disabled={!canContinue}
           onClick={() => {
-            setCalcResult({
-              flag: destinationCountry.flag,
-              country: destinationCountry.name,
-              currency: destinationCountry.currency,
-              amount,
-              rate,
-              totalBs,
-              paymentMethod,
-              ref,
-            })
+                          setCalcResult({
+  flag: destinationCountry.flag,
+  country: destinationCountry.name,
+
+  originCurrency:
+    originCountry.currency,
+
+  destinationCurrency:
+    destinationCountry.currency,
+
+  amount,
+  rate,
+  totalBs,
+})
             navigate('/formulario')
           }}
           className="w-full rounded-3xl py-5 text-[17px] font-black transition-all duration-300"

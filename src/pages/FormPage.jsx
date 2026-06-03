@@ -115,8 +115,17 @@ export default function FormPage() {
 
   function handleSubmit() {
     const message = buildWhatsAppMessage({
-      country, amount, currency, rate, totalBs, formData: form,
-    })
+  amount,
+  currency:
+    calcResult?.originCurrency,
+
+  totalBs,
+
+  destinationCurrency:
+    calcResult?.destinationCurrency,
+
+  formData: form,
+})
     const params = new URLSearchParams(window.location.search)
     const ref = params.get('ref') || 'multipower'
     openWhatsApp(message, ref)

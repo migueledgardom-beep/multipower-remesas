@@ -182,81 +182,24 @@ const formConfig =
   countryConfig.Venezuela
 
   function updateField(field, value) {
-    setForm((prev) => ({ ...prev, [field]: value }))
-  }
-
-  async function handleSubmit() {
-
-  const message = buildWhatsAppMessage({
-    amount,
-    currency:
-      calcResult?.originCurrency,
-
-    totalBs,
-
-    destinationCurrency:
-      calcResult?.destinationCurrency,
-
-    formData: form,
-  })
-
-  const ref =
-    calcResult?.ref || 'multipower'
-
-  await saveOperation({
-    ref,
-
-    agent:
-      ref
-        .replace('01', '')
-        .toUpperCase(),
-
-    origin:
-      calcResult?.originCountry || '',
-
-    destination:
-      country,
-
-    amount,
-
-    originCurrency:
-      calcResult?.originCurrency,
-
-    totalReceived:
-      totalBs,
-
-    destinationCurrency:
-      calcResult?.destinationCurrency,
-
-    paymentMethod:
-      calcResult?.paymentMethod,
-
-    bank:
-      form.bank,
-
-    name:
-      form.name,
-
-    phone:
-      form.phone,
-  })
-
-  openWhatsApp(message, ref)
-
-  navigate('/exito')
+  setForm((prev) => ({ ...prev, [field]: value }))
 }
 
-  const isComplete =
-    form.bank && form.account && form.name && form.cedula && form.phone
+function handleSubmit() {
+  alert('BOTON FUNCIONA')
+}
 
-  return (
-    <div
-      className="min-h-screen text-gray-900"
-      style={{
-        background: 'linear-gradient(160deg, #fffdf5 0%, #fff8e1 40%, #fafafa 100%)',
-        fontFamily: "'Outfit', sans-serif",
-      }}
-    >
+const isComplete =
+  form.bank && form.account && form.name && form.cedula && form.phone
+
+return (
+  <div
+    className="min-h-screen text-gray-900"
+    style={{
+      background: 'linear-gradient(160deg, #fffdf5 0%, #fff8e1 40%, #fafafa 100%)',
+      fontFamily: "'Outfit', sans-serif",
+    }}
+  >
       {/* Blob decorativo */}
       <div
         className="pointer-events-none fixed top-0 right-0 w-[420px] h-[420px] opacity-30"
@@ -317,7 +260,6 @@ const formConfig =
     Completa los datos del beneficiario
   </p>
 </div>
-:::
 
 
         {/* ── RESUMEN DE OPERACIÓN ───────────────────────────────────────── */}
@@ -399,8 +341,8 @@ const formConfig =
 
         {/* ── BOTÓN ENVIAR ───────────────────────────────────────────────── */}
         <button
-          onClick={handleSubmit}
-          disabled={!isComplete}
+          onClick={() => alert('CLICK DETECTADO')}
+          disabled={false}
           className="w-full rounded-3xl py-5 text-[17px] font-black transition-all duration-300"
           style={{
             background: isComplete

@@ -35,15 +35,118 @@ export const COUNTRIES = [
   { name: 'Brasil', flag: '🇧🇷', currency: 'BRL' },
 ]
 
-export const BANKS = [
-  'Banco de Venezuela',
-  'Banesco',
-  'Mercantil',
-  'Provincial (BBVA)',
-  'Bicentenario',
-  'Del Tesoro',
-  'Activo',
-  'BNC',
-  'Bancamiga',
-  'Otro',
-]
+export const BANKS_BY_COUNTRY = {
+  Venezuela: [
+    'Banco de Venezuela',
+    'Banesco',
+    'Mercantil',
+    'Provincial (BBVA)',
+    'Bicentenario',
+    'Del Tesoro',
+    'Activo',
+    'BNC',
+    'Bancamiga',
+    'Otro',
+  ],
+
+  Chile: [
+    'BancoEstado',
+    'Banco de Chile',
+    'Santander',
+    'BCI',
+    'Scotiabank',
+    'Itaú',
+    'Banco Falabella',
+    'Banco Security',
+    'Otro',
+  ],
+
+  Colombia: [
+    'Bancolombia',
+    'Davivienda',
+    'BBVA Colombia',
+    'Banco de Bogotá',
+    'Banco de Occidente',
+    'Nequi',
+    'Daviplata',
+    'Otro',
+  ],
+
+  Perú: [
+    'BCP',
+    'Interbank',
+    'BBVA Perú',
+    'Scotiabank Perú',
+    'Banco Pichincha',
+    'Otro',
+  ],
+
+  México: [
+    'BBVA México',
+    'Banorte',
+    'Santander México',
+    'Citibanamex',
+    'HSBC México',
+    'Otro',
+  ],
+
+  Argentina: [
+    'Banco Nación',
+    'Banco Galicia',
+    'Banco Santander',
+    'BBVA Argentina',
+    'Banco Macro',
+    'Otro',
+  ],
+
+  Brasil: [
+    'Banco do Brasil',
+    'Itaú',
+    'Bradesco',
+    'Santander Brasil',
+    'Caixa',
+    'Otro',
+  ],
+
+  España: [
+    'Santander',
+    'BBVA',
+    'CaixaBank',
+    'Sabadell',
+    'Bankinter',
+    'Otro',
+  ],
+
+  Ecuador: [
+    'Banco Pichincha',
+    'Banco Guayaquil',
+    'Produbanco',
+    'Banco del Pacífico',
+    'Otro',
+  ],
+
+  Panamá: [
+    'Banco General',
+    'Banistmo',
+    'BAC Panamá',
+    'Caja de Ahorros',
+    'Otro',
+  ],
+
+  'Estados Unidos': [
+    'Bank of America',
+    'Chase',
+    'Wells Fargo',
+    'Citibank',
+    'US Bank',
+    'Otro',
+  ],
+
+  'República Dominicana': [
+    'Banreservas',
+    'Banco Popular',
+    'BHD',
+    'Scotiabank RD',
+    'Otro',
+  ],
+}

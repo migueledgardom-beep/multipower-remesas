@@ -8,8 +8,9 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import useStore from '../store/useStore'
-import { BANKS } from '../utils/countries'
+import { BANKS_BY_COUNTRY } from '../utils/countries'
 import { buildWhatsAppMessage, openWhatsApp } from '../utils/whatsapp'
+import { saveOperation } from '../services/operationsService'
 
 /* ─── Sub-componente: Input field premium ─────────────────────────────── */
 function PremiumInput({ label, icon, placeholder, value, onChange, type = 'text' }) {
@@ -108,29 +109,142 @@ export default function FormPage() {
   const amount   = calcResult?.amount   || 0
   const totalBs  = calcResult?.totalBs  || 0
   const rate     = calcResult?.rate     || 0
+  const availableBanks =
+  BANKS_BY_COUNTRY[country] || ['Otro']
+  const countryConfig = {
+  Venezuela: {
+    accountLabel: 'Número de cuenta',
+    accountPlaceholder: '0000-0000-00-0000000000',
+    phoneLabel: 'Teléfono',
+    phonePlaceholder: '0412xxxxxxx',
+    documentLabel: 'Cédula',
+  },
+
+  Chile: {
+    accountLabel: 'Cuenta bancaria',
+    accountPlaceholder: 'Ej: 12345678',
+    phoneLabel: 'Teléfono',
+    phonePlaceholder: '+56 9 1234 5678',
+    documentLabel: 'RUT',
+  },
+
+  Colombia: {
+    accountLabel: 'Cuenta / Nequi',
+    accountPlaceholder: 'Número de cuenta o Nequi',
+    phoneLabel: 'Teléfono',
+    phonePlaceholder: '+57 3001234567',
+    documentLabel: 'Cédula',
+  },
+
+  Perú: {
+    accountLabel: 'Cuenta bancaria',
+    accountPlaceholder: 'Número de cuenta',
+    phoneLabel: 'Teléfono',
+    phonePlaceholder: '+51 999999999',
+    documentLabel: 'DNI',
+  },
+
+  México: {
+    accountLabel: 'CLABE',
+    accountPlaceholder: '18 dígitos',
+    phoneLabel: 'Teléfono',
+    phonePlaceholder: '+52 55 1234 5678',
+    documentLabel: 'CURP / INE',
+  },
+
+  Argentina: {
+    accountLabel: 'CBU / Alias',
+    accountPlaceholder: 'CBU o Alias',
+    phoneLabel: 'Teléfono',
+    phonePlaceholder: '+54 11 1234 5678',
+    documentLabel: 'DNI',
+  },
+
+  Brasil: {
+    accountLabel: 'PIX',
+    accountPlaceholder: 'Clave PIX',
+    phoneLabel: 'Teléfono',
+    phonePlaceholder: '+55 11 99999 9999',
+    documentLabel: 'CPF',
+  },
+
+  España: {
+    accountLabel: 'IBAN',
+    accountPlaceholder: 'ES00 0000 0000 0000',
+    phoneLabel: 'Teléfono',
+    phonePlaceholder: '+34 600 000 000',
+    documentLabel: 'DNI/NIE',
+  },
+}
+
+const formConfig =
+  countryConfig[country] ||
+  countryConfig.Venezuela
 
   function updateField(field, value) {
     setForm((prev) => ({ ...prev, [field]: value }))
   }
 
-  function handleSubmit() {
-    const message = buildWhatsAppMessage({
-  amount,
-  currency:
-    calcResult?.originCurrency,
+  async function handleSubmit() {
 
-  totalBs,
+  const message = buildWhatsAppMessage({
+    amount,
+    currency:
+      calcResult?.originCurrency,
 
-  destinationCurrency:
-    calcResult?.destinationCurrency,
+    totalBs,
 
-  formData: form,
-})
-    const params = new URLSearchParams(window.location.search)
-    const ref = params.get('ref') || 'multipower'
-    openWhatsApp(message, ref)
-    navigate('/exito')
-  }
+    destinationCurrency:
+      calcResult?.destinationCurrency,
+
+    formData: form,
+  })
+
+  const ref =
+    calcResult?.ref || 'multipower'
+
+  await saveOperation({
+    ref,
+
+    agent:
+      ref
+        .replace('01', '')
+        .toUpperCase(),
+
+    origin:
+      calcResult?.originCountry || '',
+
+    destination:
+      country,
+
+    amount,
+
+    originCurrency:
+      calcResult?.originCurrency,
+
+    totalReceived:
+      totalBs,
+
+    destinationCurrency:
+      calcResult?.destinationCurrency,
+
+    paymentMethod:
+      calcResult?.paymentMethod,
+
+    bank:
+      form.bank,
+
+    name:
+      form.name,
+
+    phone:
+      form.phone,
+  })
+
+  openWhatsApp(message, ref)
+
+  navigate('/exito')
+}
 
   const isComplete =
     form.bank && form.account && form.name && form.cedula && form.phone
@@ -241,12 +355,12 @@ export default function FormPage() {
               placeholder="Selecciona el banco"
               value={form.bank}
               onChange={(v) => updateField('bank', v)}
-              options={BANKS}
+              options={availableBanks}
             />
             <PremiumInput
-              label="Número de cuenta"
+              label={formConfig.accountLabel}
               icon="💳"
-              placeholder="0000-0000-00-0000000000"
+              placeholder={formConfig.accountPlaceholder}
               value={form.account}
               onChange={(v) => updateField('account', v)}
             />
@@ -266,16 +380,16 @@ export default function FormPage() {
               onChange={(v) => updateField('name', v)}
             />
             <PremiumInput
-              label="Cédula"
+              label={formConfig.documentLabel}
               icon="🪪"
               placeholder="V-12345678"
               value={form.cedula}
               onChange={(v) => updateField('cedula', v)}
             />
             <PremiumInput
-              label="Teléfono"
+              label={formConfig.phoneLabel}
               icon="📱"
-              placeholder="0414-0000000"
+              placeholder={formConfig.phonePlaceholder}
               value={form.phone}
               onChange={(v) => updateField('phone', v)}
               type="tel"

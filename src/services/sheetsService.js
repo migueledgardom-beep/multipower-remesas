@@ -113,6 +113,8 @@ export async function getRates() {
     console.log(csv)
 
     const rates = parseCsv(csv)
+    
+    console.log('RATES PARSEADOS:', rates)
 
     cachedRates = { ...FALLBACK_RATES, ...rates, _source: 'sheets' }
     cacheTime = now

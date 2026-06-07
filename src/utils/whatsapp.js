@@ -31,16 +31,21 @@ import useStore from '../store/useStore'
 /**
 
 * Obtiene número WhatsApp según ref
-  */
-  function getWhatsAppByRef(rates, ref) {
-  const refKey =
-  `REF_${ref.toUpperCase()}`
+  */function getWhatsAppByRef(rates, ref) {
 
-return (
-rates?.[refKey] ||
-rates?.REF_MULTIPOWER ||
-'56940668875'
-)
+  const refKey =
+    `REF_${String(ref).trim().toUpperCase()}`
+
+  console.log('REF ORIGINAL:', ref)
+  console.log('REF KEY:', refKey)
+  console.log('RATES:', rates)
+  console.log('RESULTADO:', rates?.[refKey])
+
+  return (
+    rates?.[refKey] ||
+    rates?.REF_MULTIPOWER ||
+    '56940668875'
+  )
 }
 
 /**
